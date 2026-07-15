@@ -84,10 +84,14 @@ contract CapabilitiesTest is Test {
         assertEq(beacon.orielCategory(), OrielConstants.CATEGORY_RANDOMNESS);
     }
 
-    function test_civicLedger() public {
-        CivicLedger civic = new CivicLedger();
+    function _newLedger() internal returns (CivicLedger civic, address alice) {
+        civic = new CivicLedger();
+        alice = address(0xA11CE);
         vm.warp(300 * 86400 + 10);
-        address alice = address(0xA11CE);
+    }
+
+    function test_civicLedger_claimAndRead() public {
+        (CivicLedger civic, address alice) = _newLedger();
 
         (bool okPre,) = civic.canWrite(alice, CLAIM_SELECTOR, abi.encode(int32(3), int32(-4), uint8(2)));
         assertTrue(okPre, "advisory pre-check should allow");
@@ -102,11 +106,13 @@ contract CapabilitiesTest is Test {
         assertEq(buildingType, 2);
         assertEq(claimedAt, uint64(block.timestamp));
         assertEq(civic.claimCount(), 1);
+        assertEq(civic.orielCategory(), OrielConstants.CATEGORY_STATE);
+    }
 
-        (bool okTaken, string memory reasonTaken) =
-            civic.canWrite(address(0xB0B), CLAIM_SELECTOR, abi.encode(int32(3), int32(-4), uint8(1)));
-        assertFalse(okTaken);
-        assertEq(reasonTaken, "CELL_TAKEN");
+    function test_civicLedger_rateLimit() public {
+        (CivicLedger civic, address alice) = _newLedger();
+        vm.prank(alice);
+        civic.claim(3, -4, 2);
 
         (bool okRate, string memory reasonRate) =
             civic.canWrite(alice, CLAIM_SELECTOR, abi.encode(int32(5), int32(5), uint8(1)));
@@ -120,22 +126,36 @@ contract CapabilitiesTest is Test {
         vm.prank(alice);
         civic.claim(5, 5, 1);
         assertEq(civic.claimCount(), 2);
+    }
 
-        (bool okOob, string memory reasonOob) =
-            civic.canWrite(alice, CLAIM_SELECTOR, abi.encode(int32(2000), int32(0), uint8(1)));
-        assertFalse(okOob);
-        assertEq(reasonOob, "OUT_OF_BOUNDS");
+    function test_civicLedger_rejections() public {
+        (CivicLedger civic, address alice) = _newLedger();
+        vm.prank(alice);
+        civic.claim(3, -4, 2);
 
-        (bool okType, string memory reasonType) =
-            civic.canWrite(address(0xB0B), CLAIM_SELECTOR, abi.encode(int32(9), int32(9), uint8(0)));
-        assertFalse(okType);
-        assertEq(reasonType, "BAD_BUILDING_TYPE");
-
-        (bool okSel, string memory reasonSel) =
-            civic.canWrite(alice, bytes4(0x12345678), abi.encode(int32(1), int32(1), uint8(1)));
-        assertFalse(okSel);
-        assertEq(reasonSel, "UNKNOWN_SELECTOR");
-
-        assertEq(civic.orielCategory(), OrielConstants.CATEGORY_STATE);
+        {
+            (bool ok, string memory reason) =
+                civic.canWrite(address(0xB0B), CLAIM_SELECTOR, abi.encode(int32(3), int32(-4), uint8(1)));
+            assertFalse(ok);
+            assertEq(reason, "CELL_TAKEN");
+        }
+        {
+            (bool ok, string memory reason) =
+                civic.canWrite(address(0xB0B), CLAIM_SELECTOR, abi.encode(int32(2000), int32(0), uint8(1)));
+            assertFalse(ok);
+            assertEq(reason, "OUT_OF_BOUNDS");
+        }
+        {
+            (bool ok, string memory reason) =
+                civic.canWrite(address(0xB0B), CLAIM_SELECTOR, abi.encode(int32(9), int32(9), uint8(0)));
+            assertFalse(ok);
+            assertEq(reason, "BAD_BUILDING_TYPE");
+        }
+        {
+            (bool ok, string memory reason) =
+                civic.canWrite(alice, bytes4(0x12345678), abi.encode(int32(1), int32(1), uint8(1)));
+            assertFalse(ok);
+            assertEq(reason, "UNKNOWN_SELECTOR");
+        }
     }
 }
