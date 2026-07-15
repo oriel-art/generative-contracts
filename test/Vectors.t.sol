@@ -5,6 +5,9 @@ import {Test} from "forge-std/Test.sol";
 import {OrielConstants} from "../src/libraries/OrielConstants.sol";
 import {OrielOperationId} from "../src/libraries/OrielOperationId.sol";
 import {OrielSchemaHash} from "../src/libraries/OrielSchemaHash.sol";
+import {OrielDescriptorHash} from "../src/libraries/OrielDescriptorHash.sol";
+import {OrielDependencyHash} from "../src/libraries/OrielDependencyHash.sol";
+import {OperationDescriptorCore, OperationKind, DependencyCore} from "../src/types/OrielTypes.sol";
 
 /// @notice Solidity <-> spec vector parity. The JSON under vectors/ is vendored
 ///         verbatim from oriel-spec; these tests are the cross-language gate.
@@ -36,7 +39,7 @@ contract VectorsTest is Test {
 
     function test_callOperationId() public view {
         bytes4 selector = bytes4(keccak256("read(bytes32)"));
-        assertEq(selector, bytes4(0x61da1439), "read(bytes32) selector");
+        assertEq(bytes32(selector), bytes32(bytes4(0x61da1439)), "read(bytes32) selector");
         assertEq(
             OrielOperationId.callOperationId(selector),
             _b32(".operationIds.readCall.value"),
@@ -76,5 +79,34 @@ contract VectorsTest is Test {
     /// @dev Schema hashing must be keccak of the raw string bytes, NOT abi.encode of the string.
     function test_schemaHashIsNotAbiEncode() public pure {
         assertTrue(OrielSchemaHash.schemaHash("(bytes32,uint256)") != keccak256(abi.encode("(bytes32,uint256)")));
+    }
+
+    /// @dev Erratum E10: descriptor-core hash preimage = abi.encode(core), 14 in-place words.
+    function test_descriptorCoreHashVector() public view {
+        OperationDescriptorCore memory core = OperationDescriptorCore({
+            operationId: _b32(".operationIds.readCall.value"),
+            rawSelector: bytes4(0x61da1439),
+            rawTopic0: bytes32(0),
+            kind: OperationKind.CALL,
+            mutability: 1,
+            inputSchemaHash: _b32(".schemaHashes.bytes32.value"),
+            outputSchemaHash: _b32(".schemaHashes.bytes32Uint256.value"),
+            privacyTier: 0,
+            maxResponseBytes: 4096,
+            temporalSupport: true,
+            maxEventRate: 0,
+            maxArgumentBytes: 128,
+            maxGas: 200000,
+            minCallIntervalSeconds: 0
+        });
+        assertEq(OrielDescriptorHash.hashCore(core), _b32(".descriptorCore.value"), "descriptor core hash vs vectors");
+    }
+
+    /// @dev Erratum E9: dependency-set hash preimage = abi.encode(deps), ascending target.
+    function test_dependencySetHashVector() public view {
+        DependencyCore[] memory deps = new DependencyCore[](2);
+        deps[0] = DependencyCore({target: address(0x1), codeHash: keccak256("oriel-dep-one")});
+        deps[1] = DependencyCore({target: address(0x2), codeHash: keccak256("oriel-dep-two")});
+        assertEq(OrielDependencyHash.hashDependencies(deps), _b32(".dependencySet.value"), "dependency set hash vs vectors");
     }
 }
