@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "protocol": "Oriel",
   "specEdition": "oriel-0.7",
   "renamedFrom": "OCAP v0.7 (July 2026)",
@@ -132,5 +132,22 @@
       }
     ],
     "value": "0x1e96022c55252a8d34cc91dffa8f3dce8526024ae96ada14aac51ff13a4b4dd9"
+  },
+  "capabilityFingerprint": {
+    "note": "OIP-6 DRAFT. fingerprint = keccak256(abi.encode(codeHash, dependencySetHash, keccak256(abi.encodePacked(descriptorCoreHashes ascending by operationId)), category, keccak256(abi.encodePacked(extensionInterfaceIds ascending)))) — five in-place 32-byte words. Empty lists digest to keccak256 of empty bytes. Behavioral identity only; canonized at v1.0.",
+    "inputs": {
+      "codeHash": "0x9ede66943eac0890a83d0fb0276b96dc02288efd4ccb6ab7b3c43d814f166e6b",
+      "dependencySetHash": "0x1e96022c55252a8d34cc91dffa8f3dce8526024ae96ada14aac51ff13a4b4dd9",
+      "descriptorCoreHashes": [
+        "0x2aa3b67a8976a1dd73c9bdd20d28ce995884a6664382c85ce88d82440fd71d57"
+      ],
+      "category": "0x8e8d33aed1b360c15b93d9ba70a546eba1f73422330d8227bda7de87280e9eec",
+      "extensionInterfaceIds": []
+    },
+    "digests": {
+      "descriptorHashes": "0x1f13f7a8c68dc4b469f11c11cde3d7b1fb9f7683c5a62a518d901f2018e2ba59",
+      "extensionIds": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+    },
+    "value": "0x6e78706b6e3a037b795302ef44840043780619874ba855f35ff27496eb000ab8"
   }
 }
