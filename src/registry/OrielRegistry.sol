@@ -23,9 +23,11 @@ contract OrielRegistry is IOrielRegistry {
     bytes32 public constant OWNER_CHANGED = keccak256("OWNER_CHANGED");
     bytes32 public constant CURATOR_ADDED = keccak256("CURATOR_ADDED");
     bytes32 public constant CURATOR_REMOVED = keccak256("CURATOR_REMOVED");
+    bytes32 public constant OWNERSHIP_TRANSFER_STARTED = keccak256("OWNERSHIP_TRANSFER_STARTED");
 
     string private _name;
     address public owner;
+    address public pendingOwner;
     mapping(address => bool) public isCurator;
 
     struct Approval {
@@ -65,10 +67,21 @@ contract OrielRegistry is IOrielRegistry {
 
     // ---------------- governance ----------------
 
-    function setOwner(address newOwner) external onlyOwner {
-        require(newOwner != address(0), "ZERO_OWNER");
-        owner = newOwner;
-        emit GovernanceChanged(OWNER_CHANGED, newOwner);
+    /// @notice Begin a two-step ownership transfer. `newOwner` must call
+    ///         acceptOwnership() for it to take effect; passing address(0) cancels a
+    ///         pending transfer. Two-step so a wrong/dead address cannot permanently
+    ///         brick governance of this immutable registry.
+    function transferOwnership(address newOwner) external onlyOwner {
+        pendingOwner = newOwner;
+        emit GovernanceChanged(OWNERSHIP_TRANSFER_STARTED, newOwner);
+    }
+
+    /// @notice Complete a pending ownership transfer. Only the pending owner may call.
+    function acceptOwnership() external {
+        require(msg.sender == pendingOwner, "NOT_PENDING_OWNER");
+        owner = pendingOwner;
+        delete pendingOwner;
+        emit GovernanceChanged(OWNER_CHANGED, owner);
     }
 
     function addCurator(address curator) external onlyOwner {
