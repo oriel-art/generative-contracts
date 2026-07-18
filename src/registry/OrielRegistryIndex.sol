@@ -7,9 +7,11 @@ import {IOrielRegistryIndex} from "../interfaces/IOrielRegistryIndex.sol";
 ///         Discovery only — authoritative approval is always chain-local.
 contract OrielRegistryIndex is IOrielRegistryIndex {
     event IndexOwnerChanged(address indexed newOwner);
+    event IndexOwnershipTransferStarted(address indexed pendingOwner);
 
     string private _name;
     address public owner;
+    address public pendingOwner;
 
     struct Entry {
         uint256 chainId;
@@ -30,10 +32,18 @@ contract OrielRegistryIndex is IOrielRegistryIndex {
         owner = owner_;
     }
 
-    function setOwner(address newOwner) external onlyOwner {
-        require(newOwner != address(0), "ZERO_OWNER");
-        owner = newOwner;
-        emit IndexOwnerChanged(newOwner);
+    /// @notice Two-step ownership transfer (see OrielRegistry) — a wrong/dead address
+    ///         cannot brick the index's governance. address(0) cancels a pending transfer.
+    function transferOwnership(address newOwner) external onlyOwner {
+        pendingOwner = newOwner;
+        emit IndexOwnershipTransferStarted(newOwner);
+    }
+
+    function acceptOwnership() external {
+        require(msg.sender == pendingOwner, "NOT_PENDING_OWNER");
+        owner = pendingOwner;
+        delete pendingOwner;
+        emit IndexOwnerChanged(owner);
     }
 
     function listRegistry(uint256 chainId, address registry, string calldata name_) external onlyOwner {

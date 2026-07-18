@@ -249,8 +249,16 @@ contract OrielRegistryTest is Test {
     }
 
     function test_ownerTransfer() public {
-        registry.setOwner(curator);
+        // Two-step: transfer stages a pending owner; ownership moves only on accept.
+        registry.transferOwnership(curator);
+        assertEq(registry.owner(), address(this));
+        assertEq(registry.pendingOwner(), curator);
+
+        vm.prank(curator);
+        registry.acceptOwnership();
         assertEq(registry.owner(), curator);
+        assertEq(registry.pendingOwner(), address(0));
+
         vm.expectRevert(bytes("NOT_OWNER"));
         registry.addCurator(stranger);
     }
@@ -317,6 +325,21 @@ contract OrielRegistryIndexTest is Test {
     function test_duplicateListingReverts() public {
         index.listRegistry(1, address(0xAAA1), "x");
         vm.expectRevert(bytes("ALREADY_LISTED"));
+        index.listRegistry(1, address(0xAAA1), "x");
+    }
+
+    function test_ownerTransferIsTwoStep() public {
+        address newOwner = address(0xBEEF);
+        index.transferOwnership(newOwner);
+        assertEq(index.owner(), address(this)); // pending until accepted
+        assertEq(index.pendingOwner(), newOwner);
+
+        vm.prank(newOwner);
+        index.acceptOwnership();
+        assertEq(index.owner(), newOwner);
+
+        // old owner can no longer govern
+        vm.expectRevert(bytes("NOT_OWNER"));
         index.listRegistry(1, address(0xAAA1), "x");
     }
 }
