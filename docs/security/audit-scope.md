@@ -44,12 +44,15 @@ is self-sufficient.
 No exploitable defect was found in `OrielRegistry` (see §4/§5). The items below are
 design notes and hardening recommendations.
 
-### F-1 (MEDIUM) — single-step ownership transfer can brick governance
-`setOwner(newOwner)` transfers ownership in one step. A typo / wrong address makes
-the registry ungovernable **permanently** (no approve/revoke, no way to fix — it is
-immutable). Recommend a two-step transfer (`Ownable2Step`-style
-`pendingOwner` + `acceptOwnership`). This is the single change most worth making
-before mainnet.
+### F-1 (MEDIUM) — single-step ownership transfer can brick governance — **RESOLVED**
+`setOwner(newOwner)` transferred ownership in one step; a typo / wrong address would
+make the (immutable) registry ungovernable **permanently**. **Fixed:** replaced with a
+two-step `transferOwnership` (stages `pendingOwner`; `address(0)` cancels a pending
+transfer) + `acceptOwnership` (only the pending owner completes it). Applied to both
+`OrielRegistry` and `OrielRegistryIndex`; covered by the two-step tests in
+`OrielRegistrySecurity.t.sol` and `OrielRegistry.t.sol`. Note: the already-deployed
+testnet instances still carry the old single-step `setOwner` — this hardens the source
+for the next (mainnet) deployment.
 
 ### F-2 (LOW, by design) — code-hash binding assumes immutability; recommend a live re-check
 The approval snapshots `codehash` at approval time. If a target is **metamorphic**
@@ -102,8 +105,9 @@ randomness source), the intentional discard of the presentation-metadata array i
 3. `entryCount() == |{ t : isApproved(t) }|` after any sequence of approve/revoke.
 4. `revokeOperation` removes exactly the named op; the swap-pop never corrupts a
    sibling op's index nor a sibling target's index.
-5. Only `owner` can `setOwner`/`addCurator`/`removeCurator`; only `owner`+curators can
-   `approve`/`revoke`; a curator cannot escalate (add another curator).
+5. Only `owner` can `transferOwnership`/`addCurator`/`removeCurator`; only the
+   `pendingOwner` can `acceptOwnership`; only `owner`+curators can `approve`/`revoke`;
+   a curator cannot escalate (add another curator).
 6. Every stored `Approval.codeHash == target.codehash` at approval time, and all ops
    on one target share one `codeHash`/`category`.
 7. No re-entrancy path mutates registry state during a target callback.

@@ -151,18 +151,55 @@ contract OrielRegistrySecurityTest is Test {
         registry.approveOperation(target, _callCore(selector), bytes32(0));
     }
 
-    // ---- governance guards (previously untested) ----
+    // ---- two-step ownership transfer (F-1) ----
 
-    function test_setOwnerZeroReverts() public {
-        vm.expectRevert(bytes("ZERO_OWNER"));
-        registry.setOwner(address(0));
-    }
-
-    function test_nonOwnerCannotSetOwner() public {
+    function test_nonOwnerCannotTransferOwnership() public {
         vm.prank(stranger);
         vm.expectRevert(bytes("NOT_OWNER"));
-        registry.setOwner(stranger);
+        registry.transferOwnership(stranger);
     }
+
+    function test_transferIsTwoStep_ownerUnchangedUntilAccepted() public {
+        registry.transferOwnership(stranger);
+        assertEq(registry.owner(), owner); // still the old owner
+        assertEq(registry.pendingOwner(), stranger);
+        // old owner still governs while the transfer is pending
+        registry.addCurator(address(0x1111));
+        assertTrue(registry.isCurator(address(0x1111)));
+    }
+
+    function test_onlyPendingOwnerCanAccept() public {
+        registry.transferOwnership(stranger);
+        vm.prank(address(0xABCD)); // not the pending owner
+        vm.expectRevert(bytes("NOT_PENDING_OWNER"));
+        registry.acceptOwnership();
+        assertEq(registry.owner(), owner); // unchanged
+    }
+
+    function test_acceptCompletesTransferAndRevokesOldOwner() public {
+        registry.transferOwnership(stranger);
+        vm.prank(stranger);
+        registry.acceptOwnership();
+        assertEq(registry.owner(), stranger);
+        assertEq(registry.pendingOwner(), address(0));
+        // the old owner is powerless now
+        vm.expectRevert(bytes("NOT_OWNER"));
+        registry.addCurator(address(0x2222));
+    }
+
+    function test_transferToZeroCancelsPending() public {
+        registry.transferOwnership(stranger);
+        assertEq(registry.pendingOwner(), stranger);
+        registry.transferOwnership(address(0)); // cancel
+        assertEq(registry.pendingOwner(), address(0));
+        // the previously-pending owner can no longer accept
+        vm.prank(stranger);
+        vm.expectRevert(bytes("NOT_PENDING_OWNER"));
+        registry.acceptOwnership();
+        assertEq(registry.owner(), owner); // never transferred
+    }
+
+    // ---- curator governance guards ----
 
     function test_addCuratorTwiceReverts() public {
         registry.addCurator(stranger);
