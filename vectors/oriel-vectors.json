@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "1.2.0",
+  "protocol": "Oriel",
+  "specEdition": "oriel-0.7",
+  "renamedFrom": "OCAP v0.7 (July 2026)",
+  "hashFunction": "keccak256",
+  "domains": {
+    "call": {
+      "preimage": "ORIEL_CALL",
+      "value": "0x95a2e021f7083c92492f27830fd04b1e60070ca84b1bbba2d56b7b39e31b15de"
+    },
+    "event": {
+      "preimage": "ORIEL_EVENT",
+      "value": "0x96858c88a4eb42528653b943457e62caf84e07ffc9772113d6e7d3ec6b65131c"
+    }
+  },
+  "categories": {
+    "data": {
+      "preimage": "ORIEL_DATA",
+      "value": "0x8e8d33aed1b360c15b93d9ba70a546eba1f73422330d8227bda7de87280e9eec"
+    },
+    "temporal": {
+      "preimage": "ORIEL_TEMPORAL",
+      "value": "0x5c3950f28cac7bb959a3d05d395f7bd21ef790640b478c19ca6e5948e2cee367"
+    },
+    "randomness": {
+      "preimage": "ORIEL_RANDOMNESS",
+      "value": "0x81ee1d89179582d6cdffc5002cfc1d13b84d90226d438a788fcbe751e55014c3"
+    },
+    "state": {
+      "preimage": "ORIEL_STATE",
+      "value": "0x8a5e4027799d3b9a9cb776691a18a3d434359cf60a5f925228486fe9905dbc75"
+    },
+    "computation": {
+      "preimage": "ORIEL_COMPUTATION",
+      "value": "0x137eb9b7e41163ac30b48778a35c09f7ade7edb1f57aa2333d94d46cb2c53f70"
+    },
+    "messaging": {
+      "preimage": "ORIEL_MESSAGING",
+      "value": "0x29e1499d4a83d7674cc3ed7d4ad4d53ef15fff4423c52139340041f289a6fccb"
+    },
+    "registry": {
+      "preimage": "ORIEL_REGISTRY",
+      "value": "0x0f8db24d9cc1d8a576ff51fc12eb5b060f817cbb25b18ee703fcea61ccc3dafb"
+    }
+  },
+  "operationIds": {
+    "readCall": {
+      "signature": "read(bytes32)",
+      "selector": "0x61da1439",
+      "padded": "0x0000000000000000000000000000000000000000000000000000000061da1439",
+      "value": "0x36bb9419b74ccee8e1c2bfcc7ce63e00e67bc64f1f77c320e0334d2cf42e2719"
+    },
+    "orielEvent": {
+      "signature": "OrielEvent(bytes32,uint256,bytes)",
+      "topic0": "0x9cf4e1d653de46c74592aacdd32a185f45bce88ab4e399b18dd5325d5664f8b2",
+      "value": "0x98d6f2cfb1e6c55c3b52569a936d802e7b5d15e5cca663ef8fb0a94f249e2bad"
+    }
+  },
+  "snapshotEvent": {
+    "signature": "OrielSnapshotCommitted(uint256,address,bytes32,bytes32,bytes32)",
+    "topic0": "0x722434c044578b55c4957b21d46d9a6743d65a8c5d22aa5c02b30569a998f269"
+  },
+  "eip712": {
+    "name": "Oriel Snapshot Attestation",
+    "version": "0.7.0"
+  },
+  "schemaHashes": {
+    "empty": {
+      "schema": "()",
+      "value": "0x861731d50c3880a2ca1994d5ec287b94b2f4bd832a67d3e41c08177bdd5674fe"
+    },
+    "bytes32": {
+      "schema": "(bytes32)",
+      "value": "0x91376cf23f43e2a9c3647f44b00086ec05ac93e8a8fbca53a196250877534e82"
+    },
+    "bytes32Uint256": {
+      "schema": "(bytes32,uint256)",
+      "value": "0xb79a17bfcc427cf6bd6923a357b413721cf39c213a5ee6285b2656e01a266c2a"
+    },
+    "bytes": {
+      "schema": "(bytes)",
+      "value": "0x27d29028a23d59b7825417222011863fa42a0015ba761d216ca3c82d6bb9b0d9"
+    },
+    "bytesUint256": {
+      "schema": "(bytes,uint256)",
+      "value": "0x3e08e98275d008e98ca1380c3a2034236e72f8a81a8c611bff5b30dbfa704c00"
+    },
+    "nestedTuple": {
+      "schema": "((address,uint256),bytes32)",
+      "value": "0x0366c8738fce79a9c1a4ac10c3176f521490ddfa0c5629e5a397207dbf23ecb1"
+    },
+    "uint256Array": {
+      "schema": "(uint256[])",
+      "value": "0x9b30ddfbaeb727290ee4eac35c6c0b0c612ba5ec3eb6d1f3f8cf123ef6525e25"
+    },
+    "address3Array": {
+      "schema": "(address[3])",
+      "value": "0x1f342cd735216c94edb96d298e54b3f653e1be8d7e62d7e7876e636bf9bcb372"
+    }
+  },
+  "descriptorCore": {
+    "note": "descriptorCoreHash = keccak256(abi.encode(core)) with the core struct encoded as a single static argument: 14 in-place 32-byte words in Appendix A field order (errata E1, E10). bytes4 is left-aligned; uints, bool, and enum are right-aligned.",
+    "core": {
+      "operationId": "0x36bb9419b74ccee8e1c2bfcc7ce63e00e67bc64f1f77c320e0334d2cf42e2719",
+      "rawSelector": "0x61da1439",
+      "rawTopic0": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "kind": 0,
+      "mutability": 1,
+      "inputSchemaHash": "0x91376cf23f43e2a9c3647f44b00086ec05ac93e8a8fbca53a196250877534e82",
+      "outputSchemaHash": "0xb79a17bfcc427cf6bd6923a357b413721cf39c213a5ee6285b2656e01a266c2a",
+      "privacyTier": 0,
+      "maxResponseBytes": 4096,
+      "temporalSupport": true,
+      "maxEventRate": 0,
+      "maxArgumentBytes": 128,
+      "maxGas": 200000,
+      "minCallIntervalSeconds": 0
+    },
+    "value": "0x2aa3b67a8976a1dd73c9bdd20d28ce995884a6664382c85ce88d82440fd71d57"
+  },
+  "dependencySet": {
+    "note": "dependencySetHash = keccak256(abi.encode(deps)) with DependencyCore[] encoded as a single dynamic-array argument: leading 0x20 offset word + length word + per-element (address word, bytes32 word). Elements canonically ordered by strictly ascending target (erratum E9).",
+    "dependencies": [
+      {
+        "target": "0x0000000000000000000000000000000000000001",
+        "codeHash": "0x45b195e5388ab79fad0d48f1d3c4cdcd0f6c60f5cd2cb98091cd3a5d5e4983da"
+      },
+      {
+        "target": "0x0000000000000000000000000000000000000002",
+        "codeHash": "0x6fa501a1ee4454d0119792c094f3f2d08a93ab22820800efc15ae1e5aeec4c29"
+      }
+    ],
+    "value": "0x1e96022c55252a8d34cc91dffa8f3dce8526024ae96ada14aac51ff13a4b4dd9"
+  },
+  "capabilityFingerprint": {
+    "note": "OIP-6 DRAFT. fingerprint = keccak256(abi.encode(codeHash, dependencySetHash, keccak256(abi.encodePacked(descriptorCoreHashes ascending by operationId)), category, keccak256(abi.encodePacked(extensionInterfaceIds ascending)))) — five in-place 32-byte words. Empty lists digest to keccak256 of empty bytes. Behavioral identity only; canonized at v1.0.",
+    "inputs": {
+      "codeHash": "0x9ede66943eac0890a83d0fb0276b96dc02288efd4ccb6ab7b3c43d814f166e6b",
+      "dependencySetHash": "0x1e96022c55252a8d34cc91dffa8f3dce8526024ae96ada14aac51ff13a4b4dd9",
+      "descriptorCoreHashes": [
+        "0x2aa3b67a8976a1dd73c9bdd20d28ce995884a6664382c85ce88d82440fd71d57"
+      ],
+      "category": "0x8e8d33aed1b360c15b93d9ba70a546eba1f73422330d8227bda7de87280e9eec",
+      "extensionInterfaceIds": []
+    },
+    "digests": {
+      "descriptorHashes": "0x1f13f7a8c68dc4b469f11c11cde3d7b1fb9f7683c5a62a518d901f2018e2ba59",
+      "extensionIds": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+    },
+    "value": "0x6e78706b6e3a037b795302ef44840043780619874ba855f35ff27496eb000ab8"
+  }
+}
