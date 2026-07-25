@@ -1,0 +1,21 @@
+{
+  "chainId": 11155111,
+  "chain": "ethereum-sepolia",
+  "deployer": "0x4384D6116b126eBC76a31228AE71aA31F3f1c0E7",
+  "deployedAt": "2026-07-15",
+  "ownerNote": "testnet: owner = deployer EOA; mainnet registries will be Safe-owned",
+  "approvals": {
+    "capabilities": 5,
+    "operations": 14
+  },
+  "contracts": {
+    "OrielRegistry": "0x8C554748Ae2f50AA72C3d2B36b4E1617a332199d",
+    "OrielRegistryIndex": "0x0a34231BdE1EBa90BF051E23a7121446Fe10e63A",
+    "BasefeeOracle": "0x45b37d204BB74B8743C8c22ee9baf84a370E0F36",
+    "LunarOracle": "0xAAC99360D63Ad29Db6760714083aC695d80e2188",
+    "BlockClock": "0xfEf6AC423FDE9F9aC22A454AAAF7bd08Ad51e86D",
+    "DailyBeacon": "0xF1025a2b90546714Cf3EC81d58ab85F90974ca23",
+    "CivicLedger": "0x84020731a636edD066297fD42681441a50366583"
+  },
+  "notes": "L1 index lists both testnet registries (discovery layer per spec 8.5)"
+}
