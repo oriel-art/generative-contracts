@@ -2,13 +2,13 @@
 pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
-import {BasefeeOracle} from "../src/capability/examples/BasefeeOracle.sol";
-import {LunarOracle} from "../src/capability/examples/LunarOracle.sol";
-import {BlockClock} from "../src/capability/examples/BlockClock.sol";
-import {DailyBeacon} from "../src/capability/examples/DailyBeacon.sol";
-import {CivicLedger} from "../src/capability/examples/CivicLedger.sol";
-import {OperationDescriptorCore, OperationMetadata} from "../src/types/OrielTypes.sol";
-import {OrielConstants} from "../src/libraries/OrielConstants.sol";
+import {BasefeeOracle} from "../../src/c4/capability/examples/BasefeeOracle.sol";
+import {LunarOracle} from "../../src/c4/capability/examples/LunarOracle.sol";
+import {BlockClock} from "../../src/c4/capability/examples/BlockClock.sol";
+import {DailyBeacon} from "../../src/c4/capability/examples/DailyBeacon.sol";
+import {CivicLedger} from "../../src/c4/capability/examples/CivicLedger.sol";
+import {OperationDescriptorCore, OperationMetadata} from "../../src/c4/types/OrielTypes.sol";
+import {OrielConstants} from "../../src/c4/libraries/OrielConstants.sol";
 
 contract CapabilitiesTest is Test {
     event EpochAdvanced(uint256 indexed epoch, uint256 timestamp);

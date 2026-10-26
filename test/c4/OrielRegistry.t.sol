@@ -2,22 +2,22 @@
 pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
-import {OrielRegistry} from "../src/registry/OrielRegistry.sol";
-import {OrielRegistryIndex} from "../src/registry/OrielRegistryIndex.sol";
-import {BasefeeOracle} from "../src/capability/examples/BasefeeOracle.sol";
-import {LunarOracle} from "../src/capability/examples/LunarOracle.sol";
-import {IOrielCapability} from "../src/interfaces/IOrielCapability.sol";
+import {OrielRegistry} from "../../src/c4/registry/OrielRegistry.sol";
+import {OrielRegistryIndex} from "../../src/c4/registry/OrielRegistryIndex.sol";
+import {BasefeeOracle} from "../../src/c4/capability/examples/BasefeeOracle.sol";
+import {LunarOracle} from "../../src/c4/capability/examples/LunarOracle.sol";
+import {IOrielCapability} from "../../src/c4/interfaces/IOrielCapability.sol";
 import {
     OperationDescriptorCore,
     OperationMetadata,
     DependencyCore,
     DependencyMetadata,
     OperationKind
-} from "../src/types/OrielTypes.sol";
-import {OrielConstants} from "../src/libraries/OrielConstants.sol";
-import {OrielOperationId} from "../src/libraries/OrielOperationId.sol";
-import {OrielDescriptorHash} from "../src/libraries/OrielDescriptorHash.sol";
-import {OrielDependencyHash} from "../src/libraries/OrielDependencyHash.sol";
+} from "../../src/c4/types/OrielTypes.sol";
+import {OrielConstants} from "../../src/c4/libraries/OrielConstants.sol";
+import {OrielOperationId} from "../../src/c4/libraries/OrielOperationId.sol";
+import {OrielDescriptorHash} from "../../src/c4/libraries/OrielDescriptorHash.sol";
+import {OrielDependencyHash} from "../../src/c4/libraries/OrielDependencyHash.sol";
 
 contract MockUnsortedDeps is IOrielCapability {
     function orielCategory() external pure returns (bytes32) {

@@ -2,20 +2,20 @@
 pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
-import {OrielConstants} from "../src/libraries/OrielConstants.sol";
-import {OrielOperationId} from "../src/libraries/OrielOperationId.sol";
-import {OrielSchemaHash} from "../src/libraries/OrielSchemaHash.sol";
-import {OrielDescriptorHash} from "../src/libraries/OrielDescriptorHash.sol";
-import {OrielDependencyHash} from "../src/libraries/OrielDependencyHash.sol";
-import {OperationDescriptorCore, OperationKind, DependencyCore} from "../src/types/OrielTypes.sol";
+import {OrielConstants} from "../../src/c4/libraries/OrielConstants.sol";
+import {OrielOperationId} from "../../src/c4/libraries/OrielOperationId.sol";
+import {OrielSchemaHash} from "../../src/c4/libraries/OrielSchemaHash.sol";
+import {OrielDescriptorHash} from "../../src/c4/libraries/OrielDescriptorHash.sol";
+import {OrielDependencyHash} from "../../src/c4/libraries/OrielDependencyHash.sol";
+import {OperationDescriptorCore, OperationKind, DependencyCore} from "../../src/c4/types/OrielTypes.sol";
 
-/// @notice Solidity <-> spec vector parity. The JSON under vectors/ is vendored
+/// @notice Solidity <-> spec vector parity. The JSON under vectors/c4/ is vendored
 ///         verbatim from oriel-spec; these tests are the cross-language gate.
 contract VectorsTest is Test {
     string internal json;
 
     function setUp() public {
-        json = vm.readFile("vectors/oriel-vectors.json");
+        json = vm.readFile("vectors/c4/oriel-vectors.json");
     }
 
     function _b32(string memory path) internal view returns (bytes32) {

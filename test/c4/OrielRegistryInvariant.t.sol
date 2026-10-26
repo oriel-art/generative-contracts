@@ -2,17 +2,17 @@
 pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
-import {OrielRegistry} from "../src/registry/OrielRegistry.sol";
-import {IOrielCapability} from "../src/interfaces/IOrielCapability.sol";
+import {OrielRegistry} from "../../src/c4/registry/OrielRegistry.sol";
+import {IOrielCapability} from "../../src/c4/interfaces/IOrielCapability.sol";
 import {
     OperationDescriptorCore,
     OperationMetadata,
     DependencyCore,
     DependencyMetadata,
     OperationKind
-} from "../src/types/OrielTypes.sol";
-import {OrielConstants} from "../src/libraries/OrielConstants.sol";
-import {OrielOperationId} from "../src/libraries/OrielOperationId.sol";
+} from "../../src/c4/types/OrielTypes.sol";
+import {OrielConstants} from "../../src/c4/libraries/OrielConstants.sol";
+import {OrielOperationId} from "../../src/c4/libraries/OrielOperationId.sol";
 
 /// Minimal conformant capability (category DATA, no dependencies).
 contract InvMockCap is IOrielCapability {

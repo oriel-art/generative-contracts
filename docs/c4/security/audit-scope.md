@@ -1,9 +1,9 @@
-# Oriel contracts — security audit scope & threat model
+# Oriel Contract C4 — security audit scope & threat model
 
 Status: **pre-mainnet.** Contracts are deployed on testnets only (Ethereum Sepolia,
 Base Sepolia). This document scopes a security review, records the trust model, and
 lists the invariants an external audit (or `/code-review ultra`) must prove. It
-accompanies the `test/OrielRegistrySecurity.t.sol` + `test/OrielRegistryInvariant.t.sol`
+accompanies the `test/c4/OrielRegistrySecurity.t.sol` + `test/c4/OrielRegistryInvariant.t.sol`
 suites added alongside it.
 
 ## 1. What the registry is
@@ -116,9 +116,9 @@ randomness source), the intentional discard of the presentation-metadata array i
 
 ## 5. Test coverage added
 
-- `test/OrielRegistryInvariant.t.sol` — stateful invariant (ghost-model) fuzzing of
+- `test/c4/OrielRegistryInvariant.t.sol` — stateful invariant (ghost-model) fuzzing of
   the enumeration/approval consistency the directory + watcher depend on.
-- `test/OrielRegistrySecurity.t.sol` — code-hash pinning (`CODEHASH_CHANGED` via
+- `test/c4/OrielRegistrySecurity.t.sol` — code-hash pinning (`CODEHASH_CHANGED` via
   `vm.etch`), category drift (`CATEGORY_CHANGED`), multi-op / multi-target revoke
   swap-pop, governance guards (zero-owner, non-owner, curator no-escalation), and the
   reentrancy-blocked proof.

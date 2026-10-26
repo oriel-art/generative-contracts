@@ -3,16 +3,16 @@ pragma solidity ^0.8.24;
 
 import {Script} from "forge-std/Script.sol";
 import {console2} from "forge-std/console2.sol";
-import {OrielRegistry} from "../src/registry/OrielRegistry.sol";
-import {OrielRegistryIndex} from "../src/registry/OrielRegistryIndex.sol";
-import {BasefeeOracle} from "../src/capability/examples/BasefeeOracle.sol";
-import {LunarOracle} from "../src/capability/examples/LunarOracle.sol";
-import {BlockClock} from "../src/capability/examples/BlockClock.sol";
-import {DailyBeacon} from "../src/capability/examples/DailyBeacon.sol";
-import {CivicLedger} from "../src/capability/examples/CivicLedger.sol";
+import {OrielRegistry} from "../../src/c4/registry/OrielRegistry.sol";
+import {OrielRegistryIndex} from "../../src/c4/registry/OrielRegistryIndex.sol";
+import {BasefeeOracle} from "../../src/c4/capability/examples/BasefeeOracle.sol";
+import {LunarOracle} from "../../src/c4/capability/examples/LunarOracle.sol";
+import {BlockClock} from "../../src/c4/capability/examples/BlockClock.sol";
+import {DailyBeacon} from "../../src/c4/capability/examples/DailyBeacon.sol";
+import {CivicLedger} from "../../src/c4/capability/examples/CivicLedger.sol";
 
 /// Usage:
-///   forge script script/Deploy.s.sol --rpc-url $RPC_URL --private-key $DEPLOYER_KEY --broadcast
+///   forge script script/c4/Deploy.s.sol --rpc-url $RPC_URL --private-key $DEPLOYER_KEY --broadcast
 /// Set ORIEL_OWNER to the Safe address that should govern the registry/index
 /// (defaults to the deployer when unset).
 contract Deploy is Script {

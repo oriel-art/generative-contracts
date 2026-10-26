@@ -1,52 +1,48 @@
-# oriel-contracts
+# Oriel Contracts
 
-Solidity reference implementations for **Oriel** — *an open protocol for artwork that perceives the chain.*
+A series of smart contracts for generative art, named **Oriel Contract C1**, **Oriel Contract C2**, **Oriel Contract C3**, and **Oriel Contract C4**.
 
-Spec + test vectors: [oriel-art/oriel-spec](https://github.com/oriel-art/oriel-spec).
+The C-number identifies a model in the series, with increasing capability and complexity. It is separate from a model’s release version and from the Oriel protocol version.
 
-## Contents
+## The series
+
+| Model | Status | Scope |
+|---|---|---|
+| Oriel Contract C1 | Planned — first to build | Starting model; requirements to be defined. |
+| Oriel Contract C2 | Planned — second to build | Requirements to be defined after C1. |
+| Oriel Contract C3 | Planned — third to build | Requirements to be defined after C2. |
+| [Oriel Contract C4](docs/c4/README.md) | Existing advanced implementation — fourth in the series | Chain-aware protocol infrastructure: capability registry, discovery index, example capabilities, and snapshot commitments. |
+
+The previous codebase now lives under `c4/` within each project folder. C1–C3 are reserved model names; no implementations have been added yet.
+
+## Repository layout
 
 | Path | Contents |
 |---|---|
-| `src/types/OrielTypes.sol` | Appendix A structs (canonical field order for hashing — erratum E1) |
-| `src/interfaces/` | `IOrielCapability`, `IOrielRegistry`, `IOrielRegistryIndex`, `IOrielWritable`, `IOrielSnapshotEvents` |
-| `src/libraries/` | `OrielConstants` (domains, categories, mutability codes), `OrielOperationId` (§7.8), `OrielSchemaHash` (§7.9), `OrielDescriptorHash` (E10), `OrielDependencyHash` (E9) |
-| `src/registry/OrielRegistry.sol` | Reference registry: approves by reading the chain at approval time (re-derives operation ids, snapshots code hashes, reads the category, computes the dependency-set hash on-chain). Immutable; role-gated (owner Safe + curators); supersets Appendix A with per-target operation enumeration (E6) |
-| `src/registry/OrielRegistryIndex.sol` | Cross-chain discovery index (§8.5) — discovery only, never authority |
-| `src/capability/OrielCapabilityBase.sol` | Descriptor storage + enumeration + self-consistency checks; passes §8.4 itself |
-| `src/capability/examples/` | The public-good seeds — see below |
-| `src/snapshot/OrielSnapshotEmitter.sol` | Mint-contract mixin emitting the §9.2 atomic commitment |
-| `script/Deploy.s.sol` | Testnet deployment script |
-| `vectors/` | Vendored verbatim from oriel-spec — the cross-language parity fixture |
-| `test/` | Vector parity (the CI gate), registry behavior, capability behavior |
+| `src/c4/` | C4 Solidity components |
+| `test/c4/` | C4 behavior, security, invariant, and vector tests |
+| `script/c4/` | C4 deployment, seed approval, and explorer verification scripts |
+| `deployments/c4/` | Existing C4 testnet deployment records |
+| `vectors/c4/` | C4 protocol test vectors |
+| `docs/c4/` | C4 implementation guide and security review scope |
+| `lib/` | Shared development dependencies |
 
-## The example capabilities
+Future models use the corresponding `c1/`, `c2/`, or `c3/` subdirectories. Foundry builds and tests all implemented models from the repository root.
 
-Each doubles as a per-category template; every descriptor is declared on-chain by the contract itself and re-verified by the registry at approval time.
-
-| Capability | Category | Trust model |
-|---|---|---|
-| `BasefeeOracle` | Data | Deterministic per block. The spec's "Secure Minimum" scenario. |
-| `LunarOracle` | Data | **Keeperless**: mean lunar phase as a pure function of block time (apparent phase deviates up to ~15 h — documented). |
-| `BlockClock` | Temporal | Fixed epochs; permissionless `checkpoint()` keeper poke emits `EpochAdvanced`. |
-| `DailyBeacon` | Randomness | One value per UTC day from `prevrandao` + parent blockhash. Aesthetic-grade; proposer-biasable within known bounds; sequencer-provided on OP-stack L2s. |
-| `CivicLedger` | State | Shared grid; unrestricted reads, enforced write policy with advisory `canWrite` mirror (§7.4/7.10). |
-
-## Build
+## Build and test
 
 ```bash
 forge build
 forge test -vvv
 ```
 
-`cbor_metadata = false` and `bytecode_hash = "none"` are deliberate: deployed bytecode is exactly what conformance scanners scan (erratum E8).
-
-## Deploy (testnets)
+To run only C4 tests:
 
 ```bash
-export ORIEL_OWNER=0xYourSafe   # optional; defaults to the deployer
-forge script script/Deploy.s.sol --rpc-url "$RPC_URL" --private-key "$DEPLOYER_KEY" --broadcast
+forge test --match-path 'test/c4/*.t.sol' -vvv
 ```
+
+See the [C4 guide](docs/c4/README.md) for its components, protocol references, and testnet deployment command.
 
 ## License
 

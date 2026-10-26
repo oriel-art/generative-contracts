@@ -3,9 +3,9 @@ pragma solidity ^0.8.24;
 
 import {Script} from "forge-std/Script.sol";
 import {console2} from "forge-std/console2.sol";
-import {OrielRegistry} from "../src/registry/OrielRegistry.sol";
-import {IOrielCapability} from "../src/interfaces/IOrielCapability.sol";
-import {OperationDescriptorCore, OperationMetadata} from "../src/types/OrielTypes.sol";
+import {OrielRegistry} from "../../src/c4/registry/OrielRegistry.sol";
+import {IOrielCapability} from "../../src/c4/interfaces/IOrielCapability.sol";
+import {OperationDescriptorCore, OperationMetadata} from "../../src/c4/types/OrielTypes.sol";
 
 /// Curator dogfood: enumerate every operation each capability declares
 /// on-chain and approve it through the registry (which re-derives ids,
@@ -13,7 +13,7 @@ import {OperationDescriptorCore, OperationMetadata} from "../src/types/OrielType
 ///
 /// Usage:
 ///   ORIEL_REGISTRY=0x... ORIEL_SEEDS=0xA,0xB,0xC \
-///   forge script script/ApproveSeeds.s.sol --rpc-url $RPC_URL --private-key $CURATOR_KEY --broadcast
+///   forge script script/c4/ApproveSeeds.s.sol --rpc-url $RPC_URL --private-key $CURATOR_KEY --broadcast
 contract ApproveSeeds is Script {
     function run() external {
         OrielRegistry registry = OrielRegistry(vm.envAddress("ORIEL_REGISTRY"));

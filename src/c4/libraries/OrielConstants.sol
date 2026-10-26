@@ -3,7 +3,7 @@ pragma solidity ^0.8.24;
 
 /// @notice Domain-separation and category constants (Oriel 0.7, Appendix C + section 7.8),
 ///         plus the reference mutability encoding (erratum E10).
-/// @dev Values are asserted against vectors/oriel-vectors.json in test/Vectors.t.sol.
+/// @dev Values are asserted against vectors/c4/oriel-vectors.json in test/c4/Vectors.t.sol.
 library OrielConstants {
     // Operation-id domain separators (section 7.8)
     bytes32 internal constant CALL_DOMAIN = keccak256("ORIEL_CALL");
